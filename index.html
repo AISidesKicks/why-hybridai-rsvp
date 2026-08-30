@@ -191,7 +191,7 @@
             <img src="assets/images/goodput.jpeg" alt="goodput" loading="lazy">
         </div>
         <div class="card">
-            <p>What counts is the tokens that actually serve users: time to first token (how long users wait before anything appears), tokens per second while streaming, and staying stable when agentic workloads hammer the system with unpredictable, multi-turn loops.</p>
+            <p>What counts is the tokens that actually serve users: time to first token (how long users wait before anything appears), tokens per second while streaming, and staying stable when agentic workloads hammer the system with unpredictable, multi-turn loops. Each one pulls the hardware in a different direction: first tokens are bound by compute (FLOPs), streaming by memory bandwidth (HBM), and agentic stability by cache reuse - no single knob wins all three.</p>
             <p>Delivering them is what drives real engineering: fast first tokens mean taming quadratic prefill compute (chunked prefill, KV caching), smooth streaming is a memory-bandwidth fight (FlashAttention, PagedAttention, speculative decoding), and agentic stability needs cache-aware scheduling (Radix Attention). Optimize for goodput, and batching, caching, parallelism - the whole serving stack - falls into place.</p>
         </div>
     </div>
