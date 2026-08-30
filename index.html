@@ -184,6 +184,10 @@
 
     <h2>Serving large LLMs - 10 main challenges as trilemmas</h2>
 
+    <p>Serving a large LLM is not one problem but ten, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
+
+    <p>The first four are what users feel: tokens that matter, waits they notice, and the speed-cost-quality puzzles behind them. The other six are what the hardware forces: fitting giant models onto GPUs, feeding them long contexts, and keeping every GPU you pay for busy on tokens people actually want.</p>
+
     <div class="topics">
         <ol>
             <li><a href="#c1">Goodput</a> - the metric that actually matters</li>
@@ -198,10 +202,6 @@
             <li><a href="#c10">Multi-token prediction</a> - more tokens per GPU pass</li>
         </ol>
     </div>
-
-    <p>Serving a large LLM is not one problem but ten, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
-
-    <p>The first four are what users feel: tokens that matter, waits they notice, and the speed-cost-quality puzzles behind them. The other six are what the hardware forces: fitting giant models onto GPUs, feeding them long contexts, and keeping every GPU you pay for busy on tokens people actually want.</p>
 
     <p id="c1"><strong>1. Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
 
