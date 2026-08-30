@@ -216,7 +216,7 @@
             <li><a href="#c6">Model parallelism</a> - one model split across many GPUs</li>
             <li><a href="#c7">Long context is not free</a> - every extra token has a price</li>
             <li><a href="#c8">Knowledge engrams</a> - massive context without the VRAM bill</li>
-            <li><a href="#c9">cache oflloading ... ???</a> >>> </li>
+            <li><a href="#c9">Cache offloading</a> - KV cache beyond the GPU HBM</li>
             <li><a href="#c10">Prefill-decode disaggregation</a> - separate GPU pools for reading and writing</li>
             <li><a href="#c11">Mixture-of-Experts serving</a> - huge models, a few experts per token</li>
             <li><a href="#c12">Multi-token prediction</a> - more tokens per GPU pass</li>
@@ -318,12 +318,12 @@
         >
     </div>
 
-    <p id="c9"><strong>9. ???</strong> - ???</p>
-    <p>???</p>
+    <p id="c9"><strong>9. Cache offloading</strong> - KV cache lives in expensive, scarce HBM, and long contexts fill it fast. Offloading cache tiers to CPU RAM and SSDs buys back memory without buying more GPUs.</p>
+    <p>Two designs show the range: NVIDIA Dynamo dynamically spills cache from GPU HBM to local CPU RAM and SSDs to cut cost, while Kimi Mooncake pools cache in centralized remote memory over RDMA - the design behind 1M+ token context windows.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
             src="assets/images/kv-cache-offload.jpeg"
-            alt="Prefill-decode disaggregation - separate GPU pools"
+            alt="KV cache offloading - NVIDIA Dynamo vs Kimi Mooncake"
             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             loading="lazy"
         >
