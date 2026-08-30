@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why Hybrid AI need GPU reservations - GPU scarsity in EU and soverein AI.">
+    <title>Why Hybrid AI need GPU reservations</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #222;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+            background: #fafafa;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.25rem;
+        }
+        .subtitle {
+            font-weight: 700;
+            color: #d35400;
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        .highlight {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .image-placeholder {
+            margin: 2.5rem 0;
+            border: 2px dashed #cbd5e1;
+            padding: 3rem 1rem;
+            text-align: center;
+            background: #fff;
+            color: #64748b;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+        footer {
+            margin-top: 3rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        .footer-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .footer-repo {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .footer-powered {
+            margin: 0.5rem 0 0;
+        }
+        .footer-projects {
+            list-style: disc;
+            padding-left: 1.25rem;
+            margin: 0;
+            color: #64748b;
+        }
+        .footer-projects li {
+            margin-bottom: 0.35rem;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .divider {
+            border-top: 6px double #d35400;
+            margin: 2.5rem 0;
+        }
+        .selfstudy {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.15rem;
+            margin: 1.5rem 0 1rem;
+        }
+        .big-question {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 1.25rem 0;
+        }
+        .duo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .duo > .card {
+            flex: 1 1 300px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .card img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+        .video-frame {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            margin-top: 1rem;
+        }
+        .video-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+        }
+        .topics ol {
+            margin: 1rem 0 1.5rem;
+            padding-left: 1.5rem;
+        }
+        .topics li {
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1><a href="https://why.hybridai.rsvp">why.hybridai.rsvp</a></h1>
+    <div class="subtitle">Why Hybrid AI need GPU reservations (GPU scarsity in EU and ilusion of soverein AI)</div>
+
+    <p>Running private AI is far from free - it shifts the invoice from a cloud vendor to your balance sheet.</p>
+
+    <p>Between high-end GPU based systems, surging electricity and cooling bills, server maintenance, and the specialized engineering talent required to keep inference pipelines optimized, self-hosting carries in real life massive capital and operational expenses.</p>
+
+    <p class="highlight">Metering and billing internal teams by the token is essential: it creates accountability against wasteful compute loops and directly amortizes those upfront infrastructure, pipelines, and staffing investments.</p>
+
+    <p><strong>InerfecenceX SemiAnalys - Every point has a story</strong><br>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/interferencex-sa.png"
+            alt="Every point has a story"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    This is a tricky architectural and engineering challenge with a lot of tradeoffs, ideal EDU AI LAB material.</p>
+
+    <p>Here I share minimal setups distilled from the larger ones I use in enterprise workshops, to demonstrate the complexity of local AI inference engineering in practice and the role of caching.</p>
+
+    <p><strong>Tokenomics</strong> - cost is more than just tokens. It spans hardware and power, pipeline complexity, observability (can you find and debug it?), reproducibility, and manageability. Every form of spend needs to be <strong>metered</strong> at the end.</p>
+
+    <p><strong>CC (Contrast & Compare)</strong> - in AI there is always more than one way to do things. A controlled environment with enough complexity lets you pick and test approaches, finding the right fit across tradeoffs and levels of integration. The EDU AI LAB contrasts and compares three inference engines on the same small ~3B model: llama.cpp, vLLM, and SGLang.</p>
+
+    <p><strong>Agentic Infrastructure</strong> - the AI evolution beyond IaaS: agents and harnesses are directly exposed to infrastructure through MCP servers and skills following dynamic rules (not fixed templates), turning infra access into governed, tool-based operations.</p>
+
+    <div class="duo">
+        <div class="card">
+            <img src="assets/images/goodput.jpeg" alt="goodput" loading="lazy">
+        </div>
+        <div class="card">
+            <p><strong>Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
+            <p>What counts is the tokens that actually serve users. That means time to first token (how long users wait before anything appears), tokens per second while streaming, and staying stable when agentic workloads hammer the system with unpredictable, multi-turn loops.</p>
+            <p>Optimize for goodput, and everything else - batching, caching, parallelism - falls into place.</p>
+        </div>
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... P50P90P95.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/P50P90P95.jpeg"
+            alt="How it ... - Every ...P50P90P95.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+        <img
+            src="assets/images/latency-colors.png"
+            alt="How it ... - Every ...latency-colors.png"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... ai-serving-trillema.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/ai-serving-trillema.jpeg"
+            alt="How it ... - Every ... ai-serving-trillema.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... ai-deploying-trilema.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/ai-deploying-trilema.jpeg"
+            alt="How it ... - Every ... ai-deploying-trilema.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... 3-paral.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/3-paral.jpeg"
+            alt="How it ... - Every ... 3-paral.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... LongContextPrice.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/LongContextPrice.jpeg"
+            alt="How it ... - Every ... LongContextPrice.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... pd-dissagregation.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/pd-dissagregation.jpeg"
+            alt="How it ... - Every ... pd-dissagregation.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... MoE-paral.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/MoE-paral.jpeg"
+            alt="How it ... - Every ... MoE-paral.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>How it ...</strong> - Every ... MTP.jpeg</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/MTP.jpeg"
+            alt="How it ... - Every ... MTP.jpeg"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+
+
+    <div class="divider"></div>
+
+    <p><strong>Mission</strong> - inference engineering is emerging as its own specialization. Just like you cannot learn programming by watching videos, you cannot learn this field from tutorials alone: you need infrastructure you can touch, feel, and explore, where tradeoffs and side effects show up for real. The EDU AI LAB is a single node, but it is Docker-container based — everything runs in containers on one machine — and it still carries enough complexity to demonstrate most inference-engineering principles from a systems-thinking perspective - turning reading into practice and letting you safely explore the tradeoffs of the field. You get the idea. <a href="https://github.com/AISidesKicks/localai-isnot-cheap" target="_blank"> Local AI is not CHEAP (GitHub Repository)</a></p>
+
+    <p class="footer-powered"><strong>Local AI is not CHEAP</strong> project is leveraged in my related projects:</p>
+    <ul class="footer-projects">
+        <li><a href="https://why.hybridai.rsvp" target="_blank">why.hybridai.rsvp</a> - REALITY: 1 trillion sized model can easily cost you 1 million dollars a year!</li>
+        <li><a href="https://howto.hybridai.click" target="_blank">howto.hybridai.click</a> - Automating HybridAI on NeoCloud with Agentic Infra approach</li>
+        <br>
+        <li><a href="https://ai.benchmarks.observer" target="_blank">ai.benchmarks.observer</a> - Actively exploring failures in popular public AI benchmarks</li>
+        <li><a href="https://howto.chimps.work" target="_blank">howto.chimps.work</a> - AI benchmarking in REAL production (executable book style)</li>
+        <li><a href="https://howto.evals.work" target="_blank">howto.evals.work</a> - AI evals in REAL production (executable book style)</li>
+        <br> 
+        <li><a href="https://my.pietra.dev" target="_blank">my.pietra.dev</a> - Custom AI harness for Interaction Engineers based on <a href="https://pi.dev" target="_blank">PI</a></li>
+        <li><a href="https://my.taufiq.dev" target="_blank">my.taufiq.dev</a> - Custom AI harness for Inference Engineers based on <a href="https://twotimespi.dev" target="_blank">TAU</a></li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <p class="selfstudy">Deep dive materials about Inference Engineering - for self-study.</p>
+
+    <div class="duo">
+        <div class="card">
+            <img src="assets/images/iebook.avif" alt="Inference Engineering by Philip Kiely (Baseten) book cover" loading="lazy">
+        </div>
+        <div class="card">
+            <p><strong>Inference Engineering</strong> - by Philip Kiely (Baseten). Now in its <strong>3rd edition</strong> and free as a PDF.</p>
+            <p>A book for engineers who want to understand the technologies that power every AI company and application in the world.</p>
+            <p>Covers the inference stack end to end - GPU kernels and the memory wall, KV-cache and prefix caching, quantization, batching, and serving in production - the same tradeoffs the EDU AI LAB demonstrates live.</p>
+            <p><a href="https://www.baseten.co/inference-engineering/" target="_blank">https://www.baseten.co/inference-engineering/</a></p>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="selfstudy">First Principles</p>
+
+    <div style="margin: 1.5rem 0; text-align: center;">
+        <img src="assets/images/firstprinciples.jpeg" alt="The Engineering Behind LLM Inference - From First Principles" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);" loading="lazy">
+    </div>
+
+    <p class="highlight">The Engineering Behind LLM Inference - From First Principles</p>
+    <p>Must-study before serving any AI model to really grasp the tradeoffs.</p>
+    <p>PY (@thecommitlog) has excellent deep-dive videos (with sources) which can help you better understand the tradeoffs in Inference Engineering - they are great companions to the book by Philip Kiely.</p>
+
+    <div class="topics">
+        <ol>
+            <li><strong>The Memory Wall:</strong> Examines the bandwidth bottleneck between high-speed compute cores and memory during prefill and autoregressive token generation.</li>
+            <li><strong>Inside the GPU:</strong> Explores hardware-level architectural components-such as streaming multiprocessors, registers, and cache hierarchies-that power modern parallel execution.</li>
+            <li><strong>Kernels and Memory:</strong> Covers low-level GPU kernel design and optimization strategies to minimize memory access overhead and maximize tensor arithmetic throughput.</li>
+            <li><strong>Quantization:</strong> Details techniques for compressing model weights and activations into lower-bit precision (FP16, FP8, FP4) to reduce memory footprint while preserving accuracy.</li>
+            <li><strong>Parallelism:</strong> Breaks down multi-GPU scaling methods, including tensor, pipeline, and data parallelism, required to partition models too large for a single device.</li>
+            <li><strong>Mixture of Experts (MoE):</strong> Analyzes dynamic routing architectures that activate sparse parameter subsets per token to increase model capacity without proportional compute costs.</li>
+            <li><strong>Speculative Decoding and Long Context:</strong> Focuses on draft-and-verify decoding algorithms alongside specialized attention mechanisms designed to accelerate generation and handle expansive context windows.</li>
+            <li><strong>Serving in Production:</strong> Addresses end-to-end deployment engineering, dynamic request batching, KV-cache orchestration, and system reliability for low-latency production APIs.</li>
+            <li><strong>The Whole Stack:</strong> as a wrapping bonus.</li>
+        </ol>
+    </div>
+
+    <p><strong>The Engineering Behind LLM Inference From First Principles - YouTube playlist:</strong></p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/3OmPtWuT9VA" title="The Engineering Behind LLM Inference From First Principles" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="selfstudy">Future of LLM Interference is diversity by specialization</p>
+    <p class="big-question">How will your future interference stack will look?</p>
+    <p><strong>The Entire AI Chip War Explained:</strong> The Entire AI Chip War Explained: Nvidia vs Everyone</p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/OxDPU-YvQX0" title="The Entire AI Chip War Explained: Nvidia vs Everyone" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <span>EDU AI LAB</span>
+            <div class="footer-links">
+                <a href="https://github.com/AISidesKicks/localai-isnot-cheap" target="_blank" class="footer-repo">Local AI is not CHEAP (GitHub Repository)</a>
+                <a href="https://linkedin.com/in/rudolfkutina" target="_blank" class="footer-repo">My LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
