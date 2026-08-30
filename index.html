@@ -267,11 +267,12 @@
         >
     </div>
 
-    <p><strong>How it ...</strong> - Every ... MoE-paral.jpeg</p>
+    <p><strong>Mixture-of-Experts serving</strong> - the trick behind today's huge models: the total model is enormous, but each token only wakes up a small subset of "experts".</p>
+    <p>That sparsity is why big models can stay (relatively) cheap to serve - massive capacity on paper, a fraction of the compute per token, and more goodput for the GPUs you already have.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
             src="assets/images/MoE-paral.jpeg"
-            alt="How it ... - Every ... MoE-paral.jpeg"
+            alt="Distributed MoE serving - sparse expert activation"
             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             loading="lazy"
         >
