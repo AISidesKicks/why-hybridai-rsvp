@@ -234,11 +234,12 @@
         >
     </div>
 
-    <p><strong>How it ...</strong> - Every ... 3-paral.jpeg</p>
+    <p><strong>Model parallelism</strong> - one big model does not fit on one GPU, so it gets split across many. Tensor parallelism slices the weights so GPUs work on the same layer together, pipeline parallelism turns layers into an assembly line, and sequence parallelism splits a huge prompt.</p>
+    <p>Splitting well keeps every GPU busy - idle GPUs are pure waste, and good utilization means more goodput per GPU you pay for.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
             src="assets/images/3-paral.jpeg"
-            alt="How it ... - Every ... 3-paral.jpeg"
+            alt="Model parallelism - tensor, pipeline, sequence"
             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             loading="lazy"
         >
