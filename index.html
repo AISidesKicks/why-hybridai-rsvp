@@ -256,11 +256,12 @@
         >
     </div>
 
-    <p><strong>How it ...</strong> - Every ... pd-dissagregation.jpeg</p>
+    <p><strong>Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
+    <p>Splitting prefill and decode onto separate GPU pools means no more head-of-line blocking, and each pool gets hardware that fits its job - predictable latency, scalable goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
             src="assets/images/pd-dissagregation.jpeg"
-            alt="How it ... - Every ... pd-dissagregation.jpeg"
+            alt="Prefill-decode disaggregation - separate GPU pools"
             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             loading="lazy"
         >
