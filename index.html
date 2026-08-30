@@ -200,11 +200,11 @@
 
     <p><strong>CC (Contrast & Compare)</strong> - in AI there is always more than one way to do things. A controlled environment with enough complexity lets you pick and test approaches, finding the right fit across tradeoffs and levels of integration. The EDU AI LAB contrasts and compares three inference engines on the same small ~3B model: llama.cpp, vLLM, and SGLang.</p>
 
-    <h2>Serving very large LLMs - 10 main challenges as trilemmas</h2>
+    <h2>Serving very large LLMs - 12 main challenges as trilemmas</h2>
 
-    <p>Serving a large LLM is not one problem but ten, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
+    <p>Serving a large LLM is not one problem but twelve, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
 
-    <p>The first four are what users feel: tokens that matter, waits they notice, and the speed-cost-quality puzzles behind them. The other six are what the hardware forces: fitting giant models onto GPUs, feeding them long contexts, and keeping every GPU you pay for busy on tokens people actually want.</p>
+    <p>The first four are what users feel: tokens that matter, waits they notice, and the speed-cost-quality puzzles behind them. The other eight are what the hardware forces: fitting giant models onto GPUs, feeding them long contexts, and keeping every GPU you pay for busy on tokens people actually want.</p>
 
     <div class="topics">
         <ol>
@@ -212,12 +212,14 @@
             <li><a href="#c2">Latency percentiles</a> - the average hides the pain</li>
             <li><a href="#c3">The AI serving trilemma</a> - speed vs cost vs quality</li>
             <li><a href="#c4">The AI deploying trilemma</a> - where the model lives</li>
-            <li><a href="#c5">Model parallelism</a> - one model split across many GPUs</li>
-            <li><a href="#c6">Long context is not free</a> - every extra token has a price</li>
-            <li><a href="#c7">Knowledge engrams</a> - massive context without the VRAM bill</li>
-            <li><a href="#c8">Prefill-decode disaggregation</a> - separate GPU pools for reading and writing</li>
-            <li><a href="#c9">Mixture-of-Experts serving</a> - huge models, a few experts per token</li>
-            <li><a href="#c10">Multi-token prediction</a> - more tokens per GPU pass</li>
+            <li><a href="#c5">Blackwell is a family</a> - one brand, two chip architectures</li>
+            <li><a href="#c6">Model parallelism</a> - one model split across many GPUs</li>
+            <li><a href="#c7">Long context is not free</a> - every extra token has a price</li>
+            <li><a href="#c8">Knowledge engrams</a> - massive context without the VRAM bill</li>
+            <li><a href="#c9">cache oflloading ... ???</a> >>> </li>
+            <li><a href="#c10">Prefill-decode disaggregation</a> - separate GPU pools for reading and writing</li>
+            <li><a href="#c11">Mixture-of-Experts serving</a> - huge models, a few experts per token</li>
+            <li><a href="#c12">Multi-token prediction</a> - more tokens per GPU pass</li>
         </ol>
     </div>
 
@@ -272,7 +274,18 @@
         >
     </div>
 
-    <p id="c5"><strong>5. Model parallelism</strong> - one big model does not fit on one GPU, so it gets split across many. Tensor parallelism slices the weights so GPUs work on the same layer together, pipeline parallelism turns layers into an assembly line, and sequence parallelism splits a huge prompt.</p>
+    <p id="c5"><strong>5. Blackwell is a family</strong> - "Blackwell" is one brand, not one chip: datacenter "Fathers" (B200, GB200, B300) and consumer/workstation "Sons" (RTX 5090, RTX PRO 6000, DGX Spark) share the name but not the same chip architecture.</p>
+    <p>Kernels tuned for one side do not run unmodified on the other, and new capabilities land datacenter-first. Which Blackwell you reserve decides what software can run on it - the details are all in the picture.</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/blackwell-family.jpg"
+            alt="Blackwell family - datacenter Fathers and consumer Sons"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p id="c6"><strong>6. Model parallelism</strong> - one big model does not fit on one GPU, so it gets split across many. Tensor parallelism slices the weights so GPUs work on the same layer together, pipeline parallelism turns layers into an assembly line, and sequence parallelism splits a huge prompt.</p>
     <p>Splitting well keeps every GPU busy - idle GPUs are pure waste, and good utilization means more goodput per GPU you pay for.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -283,7 +296,7 @@
         >
     </div>
 
-    <p id="c6"><strong>6. Long context is not free</strong> - the longer the prompt, the more compute it takes just to read it. Prompt processing grows fast with context size, and the bill lands straight on time-to-first-token and GPU memory.</p>
+    <p id="c7"><strong>7. Long context is not free</strong> - the longer the prompt, the more compute it takes just to read it. Prompt processing grows fast with context size, and the bill lands straight on time-to-first-token and GPU memory.</p>
     <p>Cache hierarchies and smarter memory use push the memory wall back, but every extra token of context still has a price.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -294,7 +307,7 @@
         >
     </div>
 
-    <p id="c7"><strong>7. Knowledge engrams</strong> - instead of stacking ever bigger KV tensors across RAM/VRAM tiers, bypass traditional KV caching by offloading context into standalone "knowledge engrams" that feed engram-aware layers directly.</p>
+    <p id="c8"><strong>8. Knowledge engrams</strong> - instead of stacking ever bigger KV tensors across RAM/VRAM tiers, bypass traditional KV caching by offloading context into standalone "knowledge engrams" that feed engram-aware layers directly.</p>
     <p>Massive context without the VRAM bill - the price is extra compute spent retrieving and injecting engrams during inference: a memory limit traded for a processing overhead.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -305,7 +318,18 @@
         >
     </div>
 
-    <p id="c8"><strong>8. Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
+    <p id="c9"><strong>9. ???</strong> - ???</p>
+    <p>???</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/kv-cache-offload.jpeg"
+            alt="Prefill-decode disaggregation - separate GPU pools"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p id="c10"><strong>10. Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
     <p>Splitting prefill and decode onto separate GPU pools means no more head-of-line blocking, and each pool gets hardware that fits its job - predictable latency, scalable goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -316,7 +340,7 @@
         >
     </div>
 
-    <p id="c9"><strong>9. Mixture-of-Experts serving</strong> - the trick behind today's huge models: the total model is enormous, but each token only wakes up a small subset of "experts".</p>
+    <p id="c11"><strong>11. Mixture-of-Experts serving</strong> - the trick behind today's huge models: the total model is enormous, but each token only wakes up a small subset of "experts".</p>
     <p>That sparsity is why big models can stay (relatively) cheap to serve - massive capacity on paper, a fraction of the compute per token, and more goodput for the GPUs you already have.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -327,7 +351,7 @@
         >
     </div>
 
-    <p id="c10"><strong>10. Multi-token prediction</strong> - normally the model generates one token per step, which caps your streaming speed. MTP-style decoding predicts more than one token per step, so each GPU pass delivers more tokens.</p>
+    <p id="c12"><strong>12. Multi-token prediction</strong> - normally the model generates one token per step, which caps your streaming speed. MTP-style decoding predicts more than one token per step, so each GPU pass delivers more tokens.</p>
     <p>Fewer steps for the same answer means faster tokens-per-second for users - a direct lift on TPOT and goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
