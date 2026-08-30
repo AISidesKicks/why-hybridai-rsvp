@@ -184,11 +184,26 @@
 
     <h2>Serving large LLMs - 10 main challenges as trilemmas</h2>
 
+    <div class="topics">
+        <ol>
+            <li><a href="#c1">Goodput</a></li>
+            <li><a href="#c2">Latency percentiles</a></li>
+            <li><a href="#c3">The AI serving trilemma</a></li>
+            <li><a href="#c4">The AI deploying trilemma</a></li>
+            <li><a href="#c5">Model parallelism</a></li>
+            <li><a href="#c6">Long context is not free</a></li>
+            <li><a href="#c7">Knowledge engrams</a></li>
+            <li><a href="#c8">Prefill-decode disaggregation</a></li>
+            <li><a href="#c9">Mixture-of-Experts serving</a></li>
+            <li><a href="#c10">Multi-token prediction</a></li>
+        </ol>
+    </div>
+
     <p>Serving a large LLM is not one problem but ten, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
 
     <p>The first four are what users feel: tokens that matter, waits they notice, and the speed-cost-quality puzzles behind them. The other six are what the hardware forces: fitting giant models onto GPUs, feeding them long contexts, and keeping every GPU you pay for busy on tokens people actually want.</p>
 
-    <p><strong>1. Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
+    <p id="c1"><strong>1. Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
 
     <div class="duo">
         <div class="card">
@@ -200,7 +215,7 @@
         </div>
     </div>
 
-    <p><strong>2. Latency percentiles</strong> - the average hides the pain. Half your users may see decent response times, but the average says nothing about the rest.</p>
+    <p id="c2"><strong>2. Latency percentiles</strong> - the average hides the pain. Half your users may see decent response times, but the average says nothing about the rest.</p>
     <p>P50, P90, P95 tell you how the slowest users are doing - and the tail is exactly what users feel and complain about. Tail latency is lost goodput: seconds wasted waiting are tokens never delivered.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -217,7 +232,7 @@
         >
     </div>
 
-    <p><strong>3. The AI serving trilemma</strong> - serving is a balancing act between speed, cost, and quality. Push one corner and another gives way: faster responses usually mean more GPUs, cheaper serving usually costs quality.</p>
+    <p id="c3"><strong>3. The AI serving trilemma</strong> - serving is a balancing act between speed, cost, and quality. Push one corner and another gives way: faster responses usually mean more GPUs, cheaper serving usually costs quality.</p>
     <p>Every optimization trades one against another. Goodput is the score that tells you if the trade was worth it.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -228,7 +243,7 @@
         >
     </div>
 
-    <p><strong>4. The AI deploying trilemma</strong> - before serving even starts, you have to decide where the model lives: your own GPUs, a cloud vendor, or something in between.</p>
+    <p id="c4"><strong>4. The AI deploying trilemma</strong> - before serving even starts, you have to decide where the model lives: your own GPUs, a cloud vendor, or something in between.</p>
     <p>Each option shifts the speed, cost, and quality tradeoffs differently - and with high-end GPUs scarce in the EU, deployment choices lock in your goodput ceiling before a single token is served.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -239,7 +254,7 @@
         >
     </div>
 
-    <p><strong>5. Model parallelism</strong> - one big model does not fit on one GPU, so it gets split across many. Tensor parallelism slices the weights so GPUs work on the same layer together, pipeline parallelism turns layers into an assembly line, and sequence parallelism splits a huge prompt.</p>
+    <p id="c5"><strong>5. Model parallelism</strong> - one big model does not fit on one GPU, so it gets split across many. Tensor parallelism slices the weights so GPUs work on the same layer together, pipeline parallelism turns layers into an assembly line, and sequence parallelism splits a huge prompt.</p>
     <p>Splitting well keeps every GPU busy - idle GPUs are pure waste, and good utilization means more goodput per GPU you pay for.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -250,7 +265,7 @@
         >
     </div>
 
-    <p><strong>6. Long context is not free</strong> - the longer the prompt, the more compute it takes just to read it. Prompt processing grows fast with context size, and the bill lands straight on time-to-first-token and GPU memory.</p>
+    <p id="c6"><strong>6. Long context is not free</strong> - the longer the prompt, the more compute it takes just to read it. Prompt processing grows fast with context size, and the bill lands straight on time-to-first-token and GPU memory.</p>
     <p>Cache hierarchies and smarter memory use push the memory wall back, but every extra token of context still has a price.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -261,7 +276,7 @@
         >
     </div>
 
-    <p><strong>7. Knowledge engrams</strong> - instead of stacking ever bigger KV tensors across RAM/VRAM tiers, bypass traditional KV caching by offloading context into standalone "knowledge engrams" that feed engram-aware layers directly.</p>
+    <p id="c7"><strong>7. Knowledge engrams</strong> - instead of stacking ever bigger KV tensors across RAM/VRAM tiers, bypass traditional KV caching by offloading context into standalone "knowledge engrams" that feed engram-aware layers directly.</p>
     <p>Massive context without the VRAM bill - the price is extra compute spent retrieving and injecting engrams during inference: a memory limit traded for a processing overhead.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -272,7 +287,7 @@
         >
     </div>
 
-    <p><strong>8. Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
+    <p id="c8"><strong>8. Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
     <p>Splitting prefill and decode onto separate GPU pools means no more head-of-line blocking, and each pool gets hardware that fits its job - predictable latency, scalable goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -283,7 +298,7 @@
         >
     </div>
 
-    <p><strong>9. Mixture-of-Experts serving</strong> - the trick behind today's huge models: the total model is enormous, but each token only wakes up a small subset of "experts".</p>
+    <p id="c9"><strong>9. Mixture-of-Experts serving</strong> - the trick behind today's huge models: the total model is enormous, but each token only wakes up a small subset of "experts".</p>
     <p>That sparsity is why big models can stay (relatively) cheap to serve - massive capacity on paper, a fraction of the compute per token, and more goodput for the GPUs you already have.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
@@ -294,7 +309,7 @@
         >
     </div>
 
-    <p><strong>10. Multi-token prediction</strong> - normally the model generates one token per step, which caps your streaming speed. MTP-style decoding predicts more than one token per step, so each GPU pass delivers more tokens.</p>
+    <p id="c10"><strong>10. Multi-token prediction</strong> - normally the model generates one token per step, which caps your streaming speed. MTP-style decoding predicts more than one token per step, so each GPU pass delivers more tokens.</p>
     <p>Fewer steps for the same answer means faster tokens-per-second for users - a direct lift on TPOT and goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
