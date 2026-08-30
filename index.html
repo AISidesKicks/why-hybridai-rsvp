@@ -278,11 +278,12 @@
         >
     </div>
 
-    <p><strong>How it ...</strong> - Every ... MTP.jpeg</p>
+    <p><strong>Multi-token prediction</strong> - normally the model generates one token per step, which caps your streaming speed. MTP-style decoding predicts more than one token per step, so each GPU pass delivers more tokens.</p>
+    <p>Fewer steps for the same answer means faster tokens-per-second for users - a direct lift on TPOT and goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
         <img
             src="assets/images/MTP.jpeg"
-            alt="How it ... - Every ... MTP.jpeg"
+            alt="Multi-token prediction - more tokens per step"
             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             loading="lazy"
         >
