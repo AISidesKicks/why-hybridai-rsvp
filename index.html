@@ -256,6 +256,17 @@
         >
     </div>
 
+    <p><strong>Knowledge engrams</strong> - instead of stacking ever bigger KV tensors across RAM/VRAM tiers, bypass traditional KV caching by offloading context into standalone "knowledge engrams" that feed engram-aware layers directly.</p>
+    <p>Massive context without the VRAM bill - the price is extra compute spent retrieving and injecting engrams during inference: a memory limit traded for a processing overhead.</p>
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/kv-cache-engrams.jpeg"
+            alt="Cache vs. embedded knowledge engrams - offloading context beyond the KV cache"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
     <p><strong>Prefill-decode disaggregation</strong> - reading the prompt and writing the answer are two very different jobs, so why force them onto the same GPUs? In the classic setup one long prompt blocks everyone else's answers in the queue.</p>
     <p>Splitting prefill and decode onto separate GPU pools means no more head-of-line blocking, and each pool gets hardware that fits its job - predictable latency, scalable goodput.</p>
     <div style="margin: 2rem 0; text-align: center;">
