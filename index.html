@@ -184,14 +184,15 @@
 
     <p><strong>Agentic Infrastructure</strong> - the AI evolution beyond IaaS: agents and harnesses are directly exposed to infrastructure through MCP servers and skills following dynamic rules (not fixed templates), turning infra access into governed, tool-based operations.</p>
 
+    <p><strong>Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
+
     <div class="duo">
         <div class="card">
             <img src="assets/images/goodput.jpeg" alt="goodput" loading="lazy">
         </div>
         <div class="card">
-            <p><strong>Goodput</strong> - the metric that actually matters. Raw throughput looks great on vendor slides, but it counts every token your GPUs burn - even the ones nobody wanted.</p>
-            <p>What counts is the tokens that actually serve users. That means time to first token (how long users wait before anything appears), tokens per second while streaming, and staying stable when agentic workloads hammer the system with unpredictable, multi-turn loops.</p>
-            <p>Optimize for goodput, and everything else - batching, caching, parallelism - falls into place.</p>
+            <p>What counts is the tokens that actually serve users: time to first token (how long users wait before anything appears), tokens per second while streaming, and staying stable when agentic workloads hammer the system with unpredictable, multi-turn loops.</p>
+            <p>Delivering them is what drives real engineering: fast first tokens mean taming quadratic prefill compute (chunked prefill, KV caching), smooth streaming is a memory-bandwidth fight (FlashAttention, PagedAttention, speculative decoding), and agentic stability needs cache-aware scheduling (Radix Attention). Optimize for goodput, and batching, caching, parallelism - the whole serving stack - falls into place.</p>
         </div>
     </div>
 
