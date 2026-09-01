@@ -108,6 +108,21 @@
             font-size: 1.15rem;
             font-weight: 700;
         }
+        .video-frame {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            margin-top: 1rem;
+        }
+        .video-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -257,6 +272,34 @@
     <h3>Providers</h3>
 
     <p><a href="https://fireworks.ai/models" target="_blank">Fireworks</a> serves serverless up to 512K context with public perf targets (TTFT P50 1 s / P90 6 s). <a href="https://www.together.ai/models" target="_blank">Together</a> serves 1M context serverless and dedicated. <a href="https://www.baseten.co/library" target="_blank">Baseten</a> offers it in the Model API (no published configs).</p>
+
+    <h2 id="sparsity">Important: Sparsity refers to 2 concepts</h2>
+
+    <p>One word, two very different jobs. Mixing them up makes vendor slides and engine jargon unreadable. One buys you FLOPS, the other fights the memory bottleneck.</p>
+
+    <h3>Sparsity as a data structure - FLOPS optimization</h3>
+
+    <p>Sparse tensor formats (COO, HiCOO and friends) are data structures that let the hardware skip zero blocks entirely - you store and compute only the nonzero stuff. This is the trick behind NVIDIA sparse tensor cores and the big FLOPS-advantage multipliers vendors love to put on slides (10x-class numbers show up there - take them as marketing best-case, structured sparsity usually lands closer to 2x).</p>
+
+    <p><strong>A Sparse Tensor Benchmark Suite for CPUs and GPUs</strong> (IEEE Computer Society):</p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/sDcgXd8-Rx0" title="A Sparse Tensor Benchmark Suite for CPUs and GPUs" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <p><a href="https://www.youtube.com/watch?v=sDcgXd8-Rx0" target="_blank">Watch on YouTube</a></p>
+
+    <h3>MoE transformer sparsity - fighting the memory bottleneck</h3>
+
+    <p>The MoE flavor of sparsity is about the bandwidth wall, not FLOPS. A huge total weight set sits in HBM, but per token only a few experts wake up - so you read and compute only a tiny slice of the weights instead of streaming all of them. Less weight traffic per token is how MoE fights the HBM bandwidth wall that caps decode speed (TPOT).</p>
+
+    <p><strong>A Visual Guide to Mixture of Experts (MoE) in LLMs</strong> (Maarten Grootendorst):</p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/sOPDGQjFcuM" title="A Visual Guide to Mixture of Experts (MoE) in LLMs" loading="lazy" allowfullscreen></iframe>
+    </div>
+    <p><a href="https://www.youtube.com/watch?v=sOPDGQjFcuM" target="_blank">Watch on YouTube</a></p>
+
+    <h3>How this maps to the config tables above</h3>
+
+    <p>The EP/MoE rows in the config maps are concept 2 - expert-parallel sharding works because only a few experts are active per token. The sparse attention indexers (Qwen QSA, the MiniMax-M3 lightning indexer) borrow concept 1's data-structure tricks to cut memory traffic on long context. Same word, different levers - now the jargon should read cleanly.</p>
 
     <div class="divider"></div>
 
