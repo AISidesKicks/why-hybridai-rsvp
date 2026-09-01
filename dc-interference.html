@@ -361,15 +361,33 @@
     <p>InferenceX is SemiAnalysis's open-source agentic inference benchmark (<a href="https://inferencex.semianalysis.com/" target="_blank">inferencex.semianalysis.com</a>, API at <a href="https://inferencex.semianalysis.com/api" target="_blank">inferencex.semianalysis.com/api</a>, code and recipes in <a href="https://github.com/SemiAnalysisAI/InferenceX" target="_blank">github.com/SemiAnalysisAI/InferenceX</a>). Why it is our golden etalon: every dashboard point comes from a public GitHub Actions run on real hardware, every config is a committed shell-script recipe in the repo, and the full benchmark database ships as weekly public snapshots - fully reproducible, auditable, open.</p>
 
 
+
     <h3>Hardware diversity - same model, very different slices</h3>
 
     <p>The same weights get served on everything from single 8x-GPU servers (H200, B200, B300) to whole-rack 72-GPU NVL72 pods from the <a href="#hw">full nvidia combos section</a> - the apples-vs-oranges rule applies to benchmark charts too: compare graphs only per hardware slice. We focus on Nvidia; H200 and the Blackwell range - H100 and other platforms are niche in EU (Europe).</p>
+
+    <p><strong>Tensor Parallel, Expert Parallel, Data Parallel (TP, EP, DP)</strong> - TP allows for maximize interactivity at small batch sizes, but it must carry out an all-reduce at every layer. EP shards experts, exploiting MoE sparsity, with the drawback being an all-to-all collective (which is more costly than simpler collectives like all-reduce) is carried out for MoE layers and can be imbalanced at small batches. DP replicates the entire model (or just parts of a model, like attention) on multiple groups of GPUs (ranks) and then load balances requests among ranks. It is the simplest to scale, but repeats weight loading which can be wasteful at scale.</p>
+
+    <p><strong>Disaggregated Prefill</strong> - Disaggregated prefill (aka PD disaggregation or simply "disagg") is the practice of separating the prefill and decode phases across separate pools of GPUs or clusters. These separate prefill and decode pools can be tuned independently and scaled to match the needs of workloads.</p>
 
     <h3>Scenario complexity - from synthetic loads to AgentX</h3>
 
     <p>Past tests were synthetic perf loads (1k/1k and 8k/8k fixed shapes); now the dashboard runs AgentX scenarios - long-context, multi-turn agentic traces that hammer prefill, decode and the KV cache the way agents do (ties back to <a href="#serving">serving many users</a>). The charts pit an SLO slider (tok/s per user) against cost per million total tokens - one axis per family: interactivity vs tokenomics. No price deep dive here, the shape of the tradeoff is the lesson.</p>
 
-    <p>The <a href="https://inferencex.semianalysis.com/inference" target="_blank">InferenceX dashboard</a> is our main interest - lots of configs with git recipes, but without reasons for such large configs; we will address that specifically. Next section: the concrete models and scenarios we care about.</p>
+    <p>The <a href="https://inferencex.semianalysis.com/inference" target="_blank">InferenceX dashboard</a> is our main interest - lots of configs with git recipes, but without reasons for such large configs; we will address that specifically.</p>
+
+    <h3>Interactivity vs throughput tradeoff</h3>
+
+    <p>The fundamental tradeoff with LLM inference is throughput versus latency. Interactivity (tok/s/user) describes how fast each user of a system receives tokens - it is the inverse of time per output token (TPOT). Throughput (tok/s) describes how many total tokens a system can crank out across all users. One can achieve higher total throughput by batching requests, but each request will be allocated less FLOPs and thus complete slower. This is analogous to the choice of riding a metro bus vs a race car. The metro bus serves many riders, but also makes frequent stops, which takes time, but the cost of the metro bus can be amortized across many passengers. The race car can only carry one or two passengers, but it will make few if any additional stops meaning a faster travel time overall, but it is much more expensive to ride per passenger. The metro bus might make more sense for people heading to the park on a weekend, while the race car might be better for bringing a celebrity to their destination. There is no one-size-fits-all solution.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img src="assets/images/bus-formula.png" alt="Bus vs race car analogy for the throughput vs interactivity tradeoff" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);" loading="lazy">
+        <p style="text-align: center; font-size: 0.85em; color: #666;">Image source: SemiAnalysis</p>
+    </div>
+
+    <p>Most benchmark results we will show in this article are an InferenceX curve. It is important to analyze throughput at various levels of interactivity/latency instead of just looking at maximum achieved throughput (which normally can only be achieved at a single low interactivity). With inference, there is no one-size-fits-all use case. The level of interactivity and throughput needed depends on the use case. For instance, real-time speech models require extremely low latency so that the end user can maintain a natural "conversation" with the LLM, whereas a basic QA chatbot may allow for higher latency. We leave it up to the reader to look at the curve and apply this principle to identify where their use case falls on the throughput-interactivity curve.</p>
+
+    <p>The Cost/Perf per TCO vs Interactivity/End-to-End Latency curve mostly follows the Throughput vs Interactivity/End-to-End Latency Curve: more tokens/hour leads to a lower cost per token as fixed $/hour costs are amortized over more tokens produced.</p>
 
     <h3>Configs to executions - our Qwen3.8-Flash-Next slice</h3>
 
