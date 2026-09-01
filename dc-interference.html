@@ -119,9 +119,74 @@
 
     <p><strong>Coming later</strong> - the main part of this deep dive will be the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf-graph deep dives (total tokens per $1 TCO vs P90 interactivity, every point has a story). The vLLM <a href="#m3">MiniMax-M3 recipe</a> below documents the exact MI355X lane the graphs run. Configs first - graphs follow.</p>
 
-<div class="divider"></div>
+    <div class="divider"></div>
 
-    <footer>
+    <h2 id="qwen">Qwen3.8-Flash-Next - DC configs from vLLM and SGLang</h2>
+
+    <div class="card">
+        <p><strong>Model glance</strong> - 176B total parameters, ~6B active per token. The twist: 51B of the total is an N-gram embedding table that can live in host RAM and be prefetched asynchronously. Attention is a GDN + QSA hybrid (3 of 4 layers Gated DeltaNet, the 4th Qwen Sparse Attention). 262K native context, extensible to 1M with YaRN. Always reasons - thinking cannot be turned off.</p>
+    </div>
+
+    <h3>Config map</h3>
+
+    <table>
+        <tr>
+            <th>Engine</th>
+            <th>Hardware</th>
+            <th>Layout / precision</th>
+            <th>Validated on</th>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>2x GB300 (min) / 4x GB300 (full tray)</td>
+            <td>TP2 / TP4, FP8</td>
+            <td>TP2 is the validated FP8 minimum; TP4 and TEP4 validated incl. MTP3</td>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>8x H200</td>
+            <td>TEP8, FP8 + Triton MoE</td>
+            <td>plain TP8 won't even load - incompatible with 128-wide FP8 quant blocks</td>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>4x MI355X</td>
+            <td>TP4, FP8 + AITER</td>
+            <td>ROCm path with VLLM_ROCM_USE_AITER=1</td>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>1x B200/B300/GB300 (TP1)</td>
+            <td>TP1, NVFP4</td>
+            <td>Blackwell-only quant; TP1 compile OOMs on GB300 - use TP2/TP4</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>4x H200/B200/B300/GB300</td>
+            <td>TP4, FP8; low-latency adds MTP (NEXTN)</td>
+            <td>high-throughput swaps in EP4, no spec decoding</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>8x MI350X/MI355X</td>
+            <td>TP8, FP8 + AITER</td>
+            <td>balanced strategy, page-size 32</td>
+        </tr>
+    </table>
+
+    <h3>Complexity callouts</h3>
+
+    <ul>
+        <li><strong>51 GB host RAM n-gram tax</strong> - the N-gram embedding table offload needs at least 51 GB of host RAM plus runtime headroom. PLE CPU offload is optional for TP/TEP but <strong>required for DEP</strong>, and the table does not support pipeline parallelism at all.</li>
+        <li><strong>TP1 OOM on GB300</strong> - single-GPU NVFP4 compilation runs out of memory; the recipe says use TP2 or TP4.</li>
+        <li><strong>mamba-cache capacity</strong> - keep <code>--max-num-seqs 256</code> or the GDN recurrent-state cache errors at startup.</li>
+    </ul>
+
+    <h3>Providers</h3>
+
+    <p><a href="https://fireworks.ai/models" target="_blank">Fireworks</a> serves dedicated FP8 and NVFP4 deployments. <a href="https://www.baseten.co/library" target="_blank">Baseten</a> - 404 at check time, recheck. <a href="https://www.together.ai/models" target="_blank">Together</a> - not yet, recheck.</p>
+
+        <footer>
         <div class="footer-top">
             <span>EDU AI LAB</span>
             <div class="footer-links">
