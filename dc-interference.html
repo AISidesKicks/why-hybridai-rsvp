@@ -354,11 +354,13 @@
 
     <p>Recipe sources - <a href="https://docs.sglang.io/cookbook/autoregressive/MiniMax/MiniMax-M3" target="_blank">SGLang cookbook</a> and <a href="https://github.com/vllm-project/recipes/blob/main/models/MiniMaxAI/MiniMax-M3.yaml" target="_blank">vLLM recipe</a>, plus <a href="https://www.together.ai/blog/serving-minimax-m3-for-efficient-inference-unlocking-1m-token-context-and-multimodality-without-regrets" target="_blank">Together AI serving blog</a>.</p>
 
-    <h2 id="sparsity">Important: Sparsity refers to 2 concepts</h2>
+    <div class="divider"></div>
+
+    <h2 id="sparsity">Important: Sparsity refers to 2 distinct concepts</h2>
 
     <p>One word, two very different jobs. Mixing them up makes vendor slides and engine jargon unreadable. One buys you FLOPS, the other fights the memory bottleneck.</p>
 
-    <h3>Sparsity as a data structure - FLOPS optimization</h3>
+    <h3>1. Sparsity as a data structure - FLOPS optimization</h3>
 
     <p>Sparse tensor formats (COO, HiCOO and friends) are data structures that let the hardware skip zero blocks entirely - you store and compute only the nonzero stuff. This is the trick behind NVIDIA sparse tensor cores and the big FLOPS-advantage multipliers vendors love to put on slides (10x-class numbers show up there - take them as marketing best-case, structured sparsity usually lands closer to 2x).</p>
 
@@ -368,7 +370,7 @@
     </div>
     <p><a href="https://www.youtube.com/watch?v=sDcgXd8-Rx0" target="_blank">Watch on YouTube</a></p>
 
-    <h3>MoE transformer sparsity - fighting the memory bottleneck</h3>
+    <h3>2. MoE transformer sparsity - fighting the memory bottleneck</h3>
 
     <p>The MoE flavor of sparsity is about the bandwidth wall, not FLOPS. A huge total weight set sits in HBM, but per token only a few experts wake up - so you read and compute only a tiny slice of the weights instead of streaming all of them. Less weight traffic per token is how MoE fights the HBM bandwidth wall that caps decode speed (TPOT).</p>
 
