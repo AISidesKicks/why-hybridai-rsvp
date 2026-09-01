@@ -132,6 +132,24 @@
 
     <p>This page is an add-on to the main page trilemmas. If the jargon below feels dense, learn the main principles first: <a href="./index.html#c4">the AI deploying trilemma</a> (where the model lives), <a href="./index.html#c5">Blackwell is a family</a>, <a href="./index.html#c6">model parallelism</a>, <a href="./index.html#c7">long context is not free</a>, <a href="./index.html#c8">knowledge engrams</a>, <a href="./index.html#c9">cache offloading</a>, <a href="./index.html#c10">prefill-decode disaggregation</a>, <a href="./index.html#c11">MoE serving</a>, and <a href="./index.html#c12">multi-token prediction</a>.</p>
 
+    <h2 id="serving">Serving many users (today also agents) - they have different needs - this is real DC tokenomics with goodput</h2>
+
+    <p>Chat users send short prompts, agents fire long multi-turn workloads - each shape stresses the datacenter differently (prefill-heavy vs decode-heavy). Raw tok/s is vanity; what a DC actually sells is goodput - tokens landing inside TTFT/TPOT SLOs per dollar of hardware. That is why the config tables below differ per workload.</p>
+
+    <h2 id="trends">LLM design trends to fulfill them</h2>
+
+    <h3>1. MoE - balanced experts, lots of them</h3>
+
+    <p>Today's MoEs are balanced - all experts are roughly the same size. Common misconception: a dedicated expert for coding and one for legal. Not true. To shard an LLM we want the opposite: the router picks many experts, nearly randomly, so the load spreads across GPUs - hence the trend to more, smaller experts. More on this in the <a href="#sparsity">MoE sparsity section</a> and the EP/MoE rows in the config maps below.</p>
+
+    <h3>2. Hybrid models - SSM + transformer</h3>
+
+    <p>SSM layers keep a compact fixed-size state instead of a growing KV cache, and a few attention layers stay in the mix for exact recall - smaller KV cache overall. <a href="#qwen">Qwen3.8-Flash-Next</a> is exactly that: a GDN + QSA hybrid (3 of 4 layers Gated DeltaNet, the 4th Qwen Sparse Attention).</p>
+
+    <h3>3. Don't need to remember it all - KV cache tricks</h3>
+
+    <p>High level only: quantize, sparsify, page, offload. The kicker: smaller cache = more things cached at once = more users and longer context on the same HBM. More volume with caching makes DC serving cheaper - that loop is DC tokenomics, the lever behind the big Dynamo-based configs in the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf graphs.</p>
+
     <p><strong>Coming later</strong> - the main part of this deep dive will be the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf-graph deep dives (total tokens per $1 TCO vs P90 interactivity, every point has a story). The vLLM <a href="#m3">MiniMax-M3 recipe</a> below documents the exact MI355X lane the graphs run. Configs first - graphs follow.</p>
 
     <div class="divider"></div>
