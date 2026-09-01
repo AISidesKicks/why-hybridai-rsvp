@@ -158,7 +158,7 @@
 
     <p>Main tricks: quantize, sparsify, page, offload, and sliding window + global dual attention - most layers only see a small recent window while a few global layers keep long-range recall, so the cache grows far slower than the context. The kicker: smaller cache = more things cached at once = more users and longer context on the same HBM. More volume with caching makes DC serving cheaper - that loop is DC tokenomics, the lever behind the big Dynamo-based configs in the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf graphs.</p>
 
-    <p><strong>Coming later</strong> - the main part of this deep dive will be the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf-graph deep dives (total tokens per $1 TCO vs P90 interactivity, every point has a story). The vLLM <a href="#m3">MiniMax-M3 recipe</a> below documents the exact MI355X lane the graphs run. Configs first - graphs follow.</p>
+    <p><strong>Next stop</strong> - the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> deep dive below: the perf-graph story (total tokens per $1 TCO vs P90 interactivity, every point has a story). The vLLM <a href="#m3">MiniMax-M3 recipe</a> above documents the exact lane the graphs run. Configs first - graphs follow.</p>
 
     <div class="divider"></div>
 
@@ -353,6 +353,22 @@
     <p><a href="https://fireworks.ai/models" target="_blank">Fireworks</a> serves serverless up to 512K context with public perf targets (TTFT P50 1 s / P90 6 s). <a href="https://www.together.ai/models" target="_blank">Together</a> serves 1M context serverless and dedicated. <a href="https://www.baseten.co/library" target="_blank">Baseten</a> offers it in the Model API (no published configs).</p>
 
     <p>Recipe sources - <a href="https://docs.sglang.io/cookbook/autoregressive/MiniMax/MiniMax-M3" target="_blank">SGLang cookbook</a> and <a href="https://github.com/vllm-project/recipes/blob/main/models/MiniMaxAI/MiniMax-M3.yaml" target="_blank">vLLM recipe</a>, plus <a href="https://www.together.ai/blog/serving-minimax-m3-for-efficient-inference-unlocking-1m-token-context-and-multimodality-without-regrets" target="_blank">Together AI serving blog</a>.</p>
+
+    <div class="divider"></div>
+
+    <h2 id="inferencex">InferenceX by SemiAnalysis - golden etalon</h2>
+
+    <p>InferenceX is SemiAnalysis's open-source agentic inference benchmark (<a href="https://inferencex.semianalysis.com/" target="_blank">inferencex.semianalysis.com</a>, code and recipes in <a href="https://github.com/SemiAnalysisAI/InferenceX" target="_blank">github.com/SemiAnalysisAI/InferenceX</a>). Why it is our golden etalon: every dashboard point comes from a public GitHub Actions run on real hardware, every config is a committed shell-script recipe in the repo, and the full benchmark database ships as weekly public snapshots - fully reproducible, auditable, open.</p>
+
+    <h3>Hardware diversity - same model, very different slices</h3>
+
+    <p>The same weights get served on everything from single 8x-GPU servers (H200, B200, B300) to whole-rack 72-GPU NVL72 pods from the <a href="#hw">full nvidia combos section</a> - the apples-vs-oranges rule applies to benchmark charts too: compare graphs only per hardware slice. We focus on Nvidia; H200 and the Blackwell range - H100 and other platforms are niche in EU (Europe).</p>
+
+    <h3>Scenario complexity - from synthetic loads to AgentX</h3>
+
+    <p>Past tests were synthetic perf loads (1k/1k and 8k/8k fixed shapes); now the dashboard runs AgentX scenarios - long-context, multi-turn agentic traces that hammer prefill, decode and the KV cache the way agents do (ties back to <a href="#serving">serving many users</a>). The charts pit an SLO slider (tok/s per user) against cost per million total tokens - one axis per family: interactivity vs tokenomics. No price deep dive here, the shape of the tradeoff is the lesson.</p>
+
+    <p>The <a href="https://inferencex.semianalysis.com/inference" target="_blank">InferenceX dashboard</a> is our main interest - lots of configs with git recipes, but without reasons for such large configs; we will address that specifically. Next section: the concrete models and scenarios we care about.</p>
 
     <div class="divider"></div>
 
