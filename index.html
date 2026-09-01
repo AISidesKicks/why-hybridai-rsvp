@@ -172,7 +172,7 @@
     <p>6 models to explore as sizes are growing:</p>
 
     <ul>
-        <li><strong>Qwen3.8-Flash-Next</strong> - native multimodal Mixture-of-Experts (MoE) reasoning model with <strong>~125B total</strong> parameters (~6B active per token), an innovative 51B n-gram embedding layer, and a 1M-token context window.</li>
+        <li><strong>Qwen3.8-Flash-Next</strong> - native multimodal Mixture-of-Experts (MoE) reasoning model with <strong>~176B total</strong> size (~125B core parameters + an innovative 51B n-gram embedding layer, ~6B active per token) and a 1M-token context window.</li>
         <li><strong>GLM 5.3 Flash</strong> - native multimodal Mixture-of-Experts (MoE) reasoning model with <strong>~320B</strong> total parameters (~18B active per token) and a 1M-token context window.</li>
         <li><strong>MiniMax-M3</strong> - native multimodal Mixture-of-Experts (MoE) reasoning model with <strong>~428B total</strong> parameters (~23B active per token) and a 1M-token context window.</li>
         <li><strong>GLM 5.3</strong> - text-only Mixture-of-Experts (MoE) reasoning model with <strong>~744B total</strong> parameters (~40B active) and a 1M context window.</li>
@@ -180,7 +180,50 @@
         <li><strong>Kimi K3</strong> - native multimodal Mixture-of-Experts (MoE) reasoning model with <strong>~2.8T total</strong> parameters (~104B active) and a 1M context window.</li>
     </ul>
 
-    <p><strong>InferenceX SemiAnalysis - Every point has a story</strong><br>
+    <p>OK, <strong>Qwen3.8-Flash-Next</strong> at ~176B total looks small enough - but can you run it yourself?</p>
+
+    <p><strong>Running Qwen3.8-Flash-Next myself</strong> - a story of hundreds of gigabytes. Model weights alone are huge, and quantization magic decides how huge: 335 GB in BF16, 173 GB in FP8, 130 GB in NVFP4 (Blackwell-only quant). "Just download the model" quickly becomes a storage and memory planning exercise.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/runitmyself.png"
+            alt="story of hundreds of gigabytes"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><em>Note: sizes from the vLLM & SGLang day-0 recipes (Aug 26). Weights alone — plus ≥51 GB host CPU RAM for the FP8 quantized N-gram table.</em></p>
+
+    <p><strong>Wuff Wuff Wuff — 4 data-center cards?</strong></p>
+
+    <p>More than model weights: serving multiple users effectively needs room for KV cache, activations, and concurrency — and the hardware must fit the precision, like NVFP4 running only on Blackwell. The official recipes call it a data-center deployment: NVFP4 default 4× B200 (TP4), FP8 minimum 2× GB300 (TP2), recommended full tray 4× GB300/B200 (TP4), and on Hopper 8× H200 in TEP8 — plain TP8 won't even load it.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/4tp-config.png"
+            alt="4 data-center cards config"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>InferenceX SemiAnalysis - We can already explore and Contrast & Compare some configs</strong></p>
+
+    <p>Total tokens per $1 TCO vs P90 interactivity is the serving trilemma measured. The H200 SGLang TEP4 FP8 point: MTP speculative decoding, ~94% chip cache hit rate, ~50.4M tokens per $1 TCO.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/tep4-config.png"
+            alt="tep4 on H200"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>InferenceX SemiAnalysis - Every point has a story</strong></p>
+
+    <p>Click any point to view server metrics and logs — cache hit rates, queue depth, and the full request timeline for that run.</p>
 
     <div style="margin: 2rem 0; text-align: center;">
         <img
