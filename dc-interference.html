@@ -148,7 +148,7 @@
 
     <h3>3. Don't need to remember it all - KV cache tricks</h3>
 
-    <p>Main tricks: quantize, sparsify, page, offload. The kicker: smaller cache = more things cached at once = more users and longer context on the same HBM. More volume with caching makes DC serving cheaper - that loop is DC tokenomics, the lever behind the big Dynamo-based configs in the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf graphs.</p>
+    <p>Main tricks: quantize, sparsify, page, offload, and sliding window + global dual attention - most layers only see a small recent window while a few global layers keep long-range recall, so the cache grows far slower than the context. The kicker: smaller cache = more things cached at once = more users and longer context on the same HBM. More volume with caching makes DC serving cheaper - that loop is DC tokenomics, the lever behind the big Dynamo-based configs in the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf graphs.</p>
 
     <p><strong>Coming later</strong> - the main part of this deep dive will be the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf-graph deep dives (total tokens per $1 TCO vs P90 interactivity, every point has a story). The vLLM <a href="#m3">MiniMax-M3 recipe</a> below documents the exact MI355X lane the graphs run. Configs first - graphs follow.</p>
 
