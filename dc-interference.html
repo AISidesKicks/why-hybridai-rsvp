@@ -192,6 +192,27 @@
 
     <div class="divider"></div>
 
+    <h2 id="model-cards">Model cards - ground truth</h2>
+
+    <p>A <strong>model card</strong> is the official document the model authors ship with the model itself - usually as the Hugging Face repo page plus a linked technical report. It is the single source of truth for parameter counts (total vs active per token), context length, quantization and precision formats, hardware guidance and the license. Everything else is derived from it.</p>
+
+    <p>Why does it matter? Blog posts and vendor slides simplify. Engine teams (vLLM, SGLang) build their day-0 recipes straight from the model card and the linked technical report, so if a config works in a recipe, you can trace it back to card facts - not marketing.</p>
+
+    <p>Configs move fast, cards are the anchor. Before you reserve a GPU infra slice for any model below, recheck its card - numbers here were checked on 2026-09-01, but cards get updated as checkpoints and quantized variants ship.</p>
+
+    <p>Official model cards for all 6 models from the index list:</p>
+
+    <ul>
+        <li><strong>Qwen3.8-Flash-Next</strong> - <a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next" target="_blank">huggingface.co/Qwen/Qwen3.8-Flash-Next</a></li>
+        <li><strong>GLM 5.3 Flash</strong> - <a href="https://huggingface.co/zai-org/GLM-5.3-Flash" target="_blank">huggingface.co/zai-org/GLM-5.3-Flash</a></li>
+        <li><strong>MiniMax-M3</strong> - <a href="https://huggingface.co/MiniMaxAI/MiniMax-M3" target="_blank">huggingface.co/MiniMaxAI/MiniMax-M3</a></li>
+        <li><strong>GLM 5.3</strong> - <a href="https://huggingface.co/zai-org/GLM-5.3" target="_blank">huggingface.co/zai-org/GLM-5.3</a></li>
+        <li><strong>DeepSeek V4 Pro</strong> - <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro" target="_blank">huggingface.co/deepseek-ai/DeepSeek-V4-Pro</a></li>
+        <li><strong>Kimi K3</strong> - <a href="https://huggingface.co/moonshotai/Kimi-K3" target="_blank">huggingface.co/moonshotai/Kimi-K3</a></li>
+    </ul>
+
+    <div class="divider"></div>
+
     <h2 id="qwen">Qwen3.8-Flash-Next - DC configs from vLLM and SGLang</h2>
 
     <div class="card">
