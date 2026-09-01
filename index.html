@@ -165,6 +165,36 @@
             background: #b8451a;
             text-decoration: none;
         }
+        .choice {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .choice-img {
+            flex: 0 0 45%;
+            max-width: 45%;
+        }
+        .choice-img img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .choice-content {
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+        }
+        .choice-content p {
+            margin: 1rem 0 0;
+        }
     </style>
 </head>
 <body>
@@ -255,18 +285,19 @@
 
     <p>Let's make together deepdive into stories (perf graphs and configs) for <strong>Qwen 3.8 flash next</strong> and <strong>MiniMax M3</strong>.</p>
 
-    <p style="text-align: center;"><a href="./dc-interference.html" target="_blank" class="cta-button">Jump to Datacenter Interference DeepDive</a></p>
-
-    <div style="margin: 2rem 0; text-align: center;">
-        <img
-            src="assets/images/roadsplit.png"
-            alt="Skill level choice: right for expert, down for beginner"
-            style="width: 50%; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
-            loading="lazy"
-        >
+    <div class="choice">
+        <div class="choice-img">
+            <img
+                src="assets/images/roadsplit.png"
+                alt="Skill level choice: right for expert, down for beginner"
+                loading="lazy"
+            >
+        </div>
+        <div class="choice-content">
+            <a href="./dc-interference.html" target="_blank" class="cta-button">Jump to Datacenter Interference DeepDive</a>
+            <p>If you are new to DC Interference learn main principles first below, without them it will be difficult to understand the jargon.</p>
+        </div>
     </div>
-
-    <p>If you are new to DC Interference learn main principles first below, without them it will be difficult to understand the jargon.</p>
 
     <h2>DC Interference - world full of new challenges</h2>
 
