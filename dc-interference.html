@@ -360,6 +360,63 @@
 
     <p>InferenceX is SemiAnalysis's open-source agentic inference benchmark (<a href="https://inferencex.semianalysis.com/" target="_blank">inferencex.semianalysis.com</a>, API at <a href="https://inferencex.semianalysis.com/api" target="_blank">inferencex.semianalysis.com/api</a>, code and recipes in <a href="https://github.com/SemiAnalysisAI/InferenceX" target="_blank">github.com/SemiAnalysisAI/InferenceX</a>). Why it is our golden etalon: every dashboard point comes from a public GitHub Actions run on real hardware, every config is a committed shell-script recipe in the repo, and the full benchmark database ships as weekly public snapshots - fully reproducible, auditable, open.</p>
 
+    <h3>Configs to executions - our Qwen3.8-Flash-Next slice</h3>
+
+    <table>
+        <tr>
+            <th>conc</th>
+            <th>dashboard id</th>
+        </tr>
+        <tr>
+            <th colspan="2">H200 FP8 - TEP4 - config <a href="https://github.com/SemiAnalysisAI/InferenceX/blob/main/benchmarks/single_node/agentic/qwen3.8next_fp8_h200_sglang_mtp.sh" target="_blank">qwen3.8next_fp8_h200_sglang_mtp.sh</a> - run <a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711" target="_blank">33038487711</a></th>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711/job/98406760958" target="_blank">c1</a></td>
+            <td>440447</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711/job/98406761035" target="_blank">c4</a></td>
+            <td>440450</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711/job/98406760957" target="_blank">c8</a></td>
+            <td>440449</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711/job/98406760930" target="_blank">c12</a></td>
+            <td>440448</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33038487711/job/98406760985" target="_blank">c16</a></td>
+            <td>440446</td>
+        </tr>
+        <tr>
+            <th colspan="2">B300 FP4 - TP1 - config <a href="https://github.com/SemiAnalysisAI/InferenceX/blob/main/benchmarks/single_node/agentic/qwen3.8next_fp4_b300_sglang_mtp.sh" target="_blank">qwen3.8next_fp4_b300_sglang_mtp.sh</a> - run <a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365" target="_blank">33039186365</a></th>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365/job/98408899989" target="_blank">c1</a></td>
+            <td>440451</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365/job/98408899982" target="_blank">c4</a></td>
+            <td>440452</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365/job/98408899939" target="_blank">c8</a></td>
+            <td>440454</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365/job/98408899965" target="_blank">c12</a></td>
+            <td>440453</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/SemiAnalysisAI/InferenceX/actions/runs/33039186365/job/98408899999" target="_blank">c16</a></td>
+            <td>440455</td>
+        </tr>
+    </table>
+
+    <p>Raw rows for this slice live in <code>data/qwen3.8-flash-next/</code> in this site's repo.</p>
+
     <h3>Hardware diversity - same model, very different slices</h3>
 
     <p>The same weights get served on everything from single 8x-GPU servers (H200, B200, B300) to whole-rack 72-GPU NVL72 pods from the <a href="#hw">full nvidia combos section</a> - the apples-vs-oranges rule applies to benchmark charts too: compare graphs only per hardware slice. We focus on Nvidia; H200 and the Blackwell range - H100 and other platforms are niche in EU (Europe).</p>
