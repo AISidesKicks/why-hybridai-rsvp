@@ -132,9 +132,13 @@
 
     <p>This page is an add-on to the main page trilemmas. If the jargon below feels dense, learn the main principles first: <a href="./index.html#c4">the AI deploying trilemma</a> (where the model lives), <a href="./index.html#c5">Blackwell is a family</a>, <a href="./index.html#c6">model parallelism</a>, <a href="./index.html#c7">long context is not free</a>, <a href="./index.html#c8">knowledge engrams</a>, <a href="./index.html#c9">cache offloading</a>, <a href="./index.html#c10">prefill-decode disaggregation</a>, <a href="./index.html#c11">MoE serving</a>, and <a href="./index.html#c12">multi-token prediction</a>.</p>
 
-    <h2 id="serving">Serving many users (today also agents) - they have different needs - this is real DC tokenomics with goodput</h2>
+    <h2 id="serving">Serving many users (today also agents)</h2>
 
-    <p>Chat users send short prompts, agents fire long multi-turn workloads - each shape stresses the datacenter differently (prefill-heavy vs decode-heavy). Raw tok/s is vanity; what a DC actually sells is goodput - tokens landing inside TTFT/TPOT SLOs per dollar of hardware. That is why the config tables below differ per workload.</p>
+    <p><strong>They have different needs - this is real DC tokenomics with goodput.</strong></p>
+
+    <p>Chat users send short prompts and judge you by one number: how fast the first token shows up. Agents fire long multi-turn workloads - huge contexts in, long generations out, many parallel calls at once. Each shape stresses the datacenter differently: chat is prefill-heavy bursts, agents hammer decode and the KV cache for minutes on end.</p>
+
+    <p>Raw tok/s is vanity; what a DC actually sells is goodput - tokens landing inside TTFT/TPOT SLOs per dollar of hardware. A GPU that is fast on paper but misses your latency targets produces zero goodput. That is why the config tables below differ per workload.</p>
 
     <h2 id="trends">LLM design trends to fulfill them</h2>
 
