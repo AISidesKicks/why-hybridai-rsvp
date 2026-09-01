@@ -186,7 +186,97 @@
 
     <p><a href="https://fireworks.ai/models" target="_blank">Fireworks</a> serves dedicated FP8 and NVFP4 deployments. <a href="https://www.baseten.co/library" target="_blank">Baseten</a> - 404 at check time, recheck. <a href="https://www.together.ai/models" target="_blank">Together</a> - not yet, recheck.</p>
 
-        <footer>
+    <h2 id="m3">MiniMax-M3 - DC configs from vLLM and SGLang</h2>
+
+    <div class="card">
+        <p><strong>Model glance</strong> - 428B total parameters, ~23B active per token (128 experts, 4 active per token). MiniMax Sparse Attention - a block-sparse "lightning indexer" that keeps long-context cost low (reported ~9x prefill / ~15x decode speedup over M2 at 1M context). 1M-token context. One quirk that shapes every config: <code>--block-size 128</code> (SGLang: page-size 128) is mandatory on every platform - the MSA sparse/index cache must match.</p>
+    </div>
+
+    <h3>Config map</h3>
+
+    <table>
+        <tr>
+            <th>Engine</th>
+            <th>Hardware</th>
+            <th>Layout / precision</th>
+            <th>Validated on</th>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>8x H200 / H20</td>
+            <td>TP8, BF16</td>
+            <td>tight single-node BF16 fit; TP8+EP and DP8+EP variants too</td>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>8x B200</td>
+            <td>TP8, NVFP4</td>
+            <td>pair with EAGLE3 draft (MHA or GQA head, 3 spec tokens)</td>
+        </tr>
+        <tr>
+            <td>vLLM</td>
+            <td>MI300X/MI325X/MI355X</td>
+            <td>TP8, MXFP8/MXFP4 + AITER</td>
+            <td>MXFP8 runs from TP4 on gfx950; MI300X stacks accuracy-safe scheduling levers</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>8x H200</td>
+            <td>TP8, BF16</td>
+            <td>1044 tok/s/GPU, GSM8K 97.0</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>8x B200</td>
+            <td>TP8, MXFP8</td>
+            <td>2385 tok/s/GPU, GSM8K 96.5</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>4x B300 / GB300</td>
+            <td>TP4, MXFP8</td>
+            <td>3285 tok/s/GPU on B300; 4323 tok/s/GPU on GB300 (8K-in/24-conc row)</td>
+        </tr>
+        <tr>
+            <td>SGLang</td>
+            <td>8x MI3xx / MI355X</td>
+            <td>TP8, MXFP8 + AITER (TP4 on gfx950)</td>
+            <td>420 tok/s/GPU on MI355X (1K-in/1K-out row)</td>
+        </tr>
+    </table>
+
+    <div class="card">
+        <p><strong>PD disaggregation - validated presets (the only model of the two with them)</strong></p>
+        <p>M3 runs prefill and decode on separate SGLang servers linked by an RDMA KV-transfer fabric (mooncake or NIXL), fronted by the PD router. The MSA-specific bit: every sparse lightning-indexer layer keeps a K-only index buffer that must reach the decode server too - SGLang transfers it alongside the main KV with no extra flags.</p>
+        <ul>
+            <li><strong>2 x 4x B200</strong> (TP4+TP4, MXFP8, NIXL over InfiniBand) - measured mean TTFT 1.1 s and TPOT 16.6 ms (~60 tok/s per stream, ~2.3k tok/s aggregate at 16 concurrent).</li>
+            <li><strong>2 x 8x H200</strong> (TP8+TP8, bf16, mooncake) - output matches single-node serving.</li>
+        </ul>
+    </div>
+
+    <h3>Providers</h3>
+
+    <p><a href="https://fireworks.ai/models" target="_blank">Fireworks</a> serves serverless up to 512K context with public perf targets (TTFT P50 1 s / P90 6 s). <a href="https://www.together.ai/models" target="_blank">Together</a> serves 1M context serverless and dedicated. <a href="https://www.baseten.co/library" target="_blank">Baseten</a> offers it in the Model API (no published configs).</p>
+
+    <div class="divider"></div>
+
+    <h2>Sources &amp; freshness</h2>
+
+    <p>All configs above were checked on <strong>2026-09-01</strong>. The recipes move fast (day-0 models, nightly images) - recheck before reserving hardware.</p>
+
+    <ul>
+        <li><a href="https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8-Flash-Next" target="_blank">SGLang cookbook - Qwen3.8-Flash-Next</a></li>
+        <li><a href="https://docs.sglang.io/cookbook/autoregressive/MiniMax/MiniMax-M3" target="_blank">SGLang cookbook - MiniMax-M3</a></li>
+        <li><a href="https://github.com/vllm-project/recipes/blob/main/models/Qwen/Qwen3.8-Flash-Next.yaml" target="_blank">vLLM recipe - Qwen3.8-Flash-Next</a></li>
+        <li><a href="https://github.com/vllm-project/recipes/blob/main/models/MiniMaxAI/MiniMax-M3.yaml" target="_blank">vLLM recipe - MiniMax-M3</a></li>
+        <li><a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis - perf graphs</a></li>
+        <li><a href="https://fireworks.ai/models" target="_blank">Fireworks model catalog</a></li>
+        <li><a href="https://www.together.ai/models" target="_blank">Together model catalog</a></li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <footer>
         <div class="footer-top">
             <span>EDU AI LAB</span>
             <div class="footer-links">
