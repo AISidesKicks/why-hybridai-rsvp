@@ -166,9 +166,17 @@
 
     <p>Coming in 8x GPU chassis (servers) with NVLink switch, small can be also 2x GPU NVLink bridge. The apples-vs-oranges part: DGX is the turnkey box you buy whole, HGX is the baseboard OEMs build their own servers on. The core is locked either way - 8x Blackwell, 1,440 GB (B200) / 2,300 GB (B300) HBM3e, 2x Xeon 8570, 14.4 TB/s NVLink. What you can configure around it: 2-4 TB RAM, ~30 TB NVMe cache, and ConnectX-7 or BlueField-3 NICs.</p>
 
+    <p>Can be custom configured for workload during production - not fully reproducible, but the plus is familiar x86 architecture - same CPUs (2x Xeon 8570) as the locked core above.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img src="assets/images/hgx-B300-platform.jpeg" alt="HGX B300 platform" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);" loading="lazy">
+    </div>
+
     <h3>Full nvidia combos - GB200 and GB300 (NVL72)</h3>
 
     <p>Not only GPU - a CPU (ARM) Grace with C2C NVLink, but many times in unified pods with nvidia networking, storage and so on - full nvidia recipe !!! 100% reproducibility. The NVL72 rack packs 36 Grace CPUs + 72 Blackwell GPUs into one 72-GPU NVLink domain with 130 TB/s NVLink bandwidth. GB300 Ultra goes further: 20 TB HBM3e, 1.5x FP4 and 2x attention throughput for reasoning workloads.</p>
+
+    <p>Unified and fully reproducible, but Grace CPU is ARM architecture - aarch64 only, so ops tooling and kernels must support it. The tradeoff mirrors the HGX side: reproducibility vs familiarity.</p>
 
     <p>Notes:</p>
     <ul>
@@ -176,7 +184,7 @@
         <li>Similar split for previous generation - H200 custom vs GH200 full combo, same principle.</li>
     </ul>
 
-    <p><a href="https://howto.hybridai.click" target="_blank">howto.hybridai.click</a> - Automating HybridAI on NeoCloud with Agentic Infra approach</p>
+    <p>See more in <a href="https://howto.hybridai.click" target="_blank">howto.hybridai.click</a> - Automating HybridAI on NeoCloud with Agentic Infra approach</p>
 
     <div class="divider"></div>
 
