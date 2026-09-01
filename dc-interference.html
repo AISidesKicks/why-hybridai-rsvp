@@ -158,6 +158,28 @@
 
     <div class="divider"></div>
 
+    <h2 id="hw">Same GPU HW - different infra slices (Apples vs Oranges)</h2>
+
+    <p>DC GPUs are in fact whole infra structure slices (simplified charging per slice used by NeoClouds). Rest of infra was at first not so important, but today it also serves KV cache, engram dictionary, agents, so looking deeper and understanding the whole infra is important.</p>
+
+    <h3>Custom B200 and B300</h3>
+
+    <p>Coming in 8x GPU chassis (servers) with NVLink switch, small can be also 2x GPU NVLink bridge. The apples-vs-oranges part: DGX is the turnkey box you buy whole, HGX is the baseboard OEMs build their own servers on. The core is locked either way - 8x Blackwell, 1,440 GB (B200) / 2,300 GB (B300) HBM3e, 2x Xeon 8570, 14.4 TB/s NVLink. What you can configure around it: 2-4 TB RAM, ~30 TB NVMe cache, and ConnectX-7 or BlueField-3 NICs.</p>
+
+    <h3>Full nvidia combos - GB200 and GB300 (NVL72)</h3>
+
+    <p>Not only GPU - a CPU (ARM) Grace with C2C NVLink, but many times in unified pods with nvidia networking, storage and so on - full nvidia recipe !!! 100% reproducibility. The NVL72 rack packs 36 Grace CPUs + 72 Blackwell GPUs into one 72-GPU NVLink domain with 130 TB/s NVLink bandwidth. GB300 Ultra goes further: 20 TB HBM3e, 1.5x FP4 and 2x attention throughput for reasoning workloads.</p>
+
+    <p>Notes:</p>
+    <ul>
+        <li>Most AI HW in europe is Nvidia, so we will focus on it</li>
+        <li>Similar split for previous generation - H200 custom vs GH200 full combo, same principle.</li>
+    </ul>
+
+    <p><a href="https://howto.hybridai.click" target="_blank">howto.hybridai.click</a> - Automating HybridAI on NeoCloud with Agentic Infra approach</p>
+
+    <div class="divider"></div>
+
     <h2 id="qwen">Qwen3.8-Flash-Next - DC configs from vLLM and SGLang</h2>
 
     <div class="card">
