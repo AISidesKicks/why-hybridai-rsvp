@@ -142,11 +142,15 @@
 
     <p>Today's MoEs are balanced - all experts are roughly the same size. Common misconception: a dedicated expert for coding and one for legal. Not true. To shard an LLM we want the opposite: the router picks many experts, nearly randomly, and the same set of experts can be loaded multiple times, so the load spreads across GPUs - hence the trend to more, smaller experts. More on this in the <a href="#sparsity">MoE sparsity section</a> and the EP/MoE rows in the config maps below.</p>
 
-    <h3>2. Hybrid models - SSM + transformer</h3>
+    <h3>2. Speculative decoding - MTP and drafters</h3>
+
+    <p>Draft a few tokens with a cheap model, verify them with the big one in a single pass - more tokens per second when drafts get accepted. It can be a built-in MTP head you just switch on, or an external drafter like EAGLE-3, DFlash 2 (parallel diffusion drafting), or DeepSeek's DSpark (dynamic scheduling adapts drafting to load). The message: different implementations have different perf and tradeoffs - extra memory for draft weights and cache, wasted compute on rejected drafts, and acceptance depends on the workload, so a wrong pick can be slower than no speculation at all.</p>
+
+    <h3>3. Hybrid models - SSM + transformer</h3>
 
     <p>SSM layers keep a compact fixed-size state instead of a growing KV cache, and a few attention layers stay in the mix for exact recall - smaller KV cache overall, smaller mem footprint. <a href="#qwen">Qwen3.8-Flash-Next</a> is exactly that: a GDN + QSA hybrid (3 of 4 layers Gated DeltaNet, the 4th Qwen Sparse Attention).</p>
 
-    <h3>3. Don't need to remember it all - KV cache tricks</h3>
+    <h3>4. Don't need to remember it all - KV cache tricks</h3>
 
     <p>Main tricks: quantize, sparsify, page, offload, and sliding window + global dual attention - most layers only see a small recent window while a few global layers keep long-range recall, so the cache grows far slower than the context. The kicker: smaller cache = more things cached at once = more users and longer context on the same HBM. More volume with caching makes DC serving cheaper - that loop is DC tokenomics, the lever behind the big Dynamo-based configs in the <a href="https://inferencex.semianalysis.com/" target="_blank">InferenceX SemiAnalysis</a> perf graphs.</p>
 
