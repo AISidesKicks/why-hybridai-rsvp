@@ -311,6 +311,21 @@
 
     <p><strong>CC (Contrast & Compare)</strong> - in AI there is always more than one way to do things. A controlled environment with enough complexity lets you pick and test approaches, finding the right fit across tradeoffs and levels of integration. The EDU AI LAB contrasts and compares three inference engines on the same small ~3B model: llama.cpp, vLLM, and SGLang.</p>
 
+    <h2>All physical hardware has bottlenecks</h2>
+
+    <p>The whole fight of getting maximum performance in AI is an optimization GAME.</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/roofline.png"
+            alt="Roofline model - performance vs arithmetic intensity, ridge point separating memory-bound and compute-bound regions"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p>Roofline diagrams (for GPUs), like the one above, help identify whether a program's performance is bottlenecked by compute power or memory bandwidth.</p>
+
     <h2>Serving very large LLMs - 12 main challenges as trilemmas</h2>
 
     <p>Serving a large LLM is not one problem but twelve, and they pull in different directions at once. Mostly these are not simple tradeoffs, but genuine trilemmas: three goals where winning any two means giving up the third (see <a href="https://en.wikipedia.org/wiki/Trilemma" target="_blank">Trilemma</a>).</p>
