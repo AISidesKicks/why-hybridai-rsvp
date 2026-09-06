@@ -391,6 +391,8 @@
 
     <p><strong>X-axis metric</strong> - Interactivity, end-to-end latency, or Time To First Token (TTFT) + agentic scenarios also offer E2E Normalized Interactivity.</p>
 
+    <p>Interactivity measures how quickly tokens stream after generation begins: approximately 1 / inter-token latency (ITL). E2E Normalized Interactivity measures the effective token rate over the whole request, including time to first token (TTFT): output tokens / end-to-end latency, or approximately 1 / (ITL + TTFT / output tokens). Both use tok/s/user. The normalized value penalizes slow TTFT, especially for short responses. Here, "normalized" means normalized by output length; it is not a 0–1 score or a comparison with another system.</p>
+
     <p><strong>Y-axis metrics</strong> - what the dashboard can plot:</p>
 
     <table>
@@ -536,6 +538,18 @@
             <td>Token Throughput per All in Utility MW (Custom User Values)</td>
         </tr>
     </table>
+
+    <p><strong>Chip config</strong> - is compound selector as: <strong>HW Platform + Engine + Cache + speculative encoding.</strong></p>
+
+    <p><strong>Scenarios</strong> - are mouse over on GRAPF (use advanced to enrich graph)</p>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img src="assets/images/complex-scenario.png" alt="InferenceX complex scenario graph" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);" loading="lazy">
+    </div>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img src="assets/images/minimax-m3-14chips.jpeg" alt="MiniMax-M3 config across 14 chips" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);" loading="lazy">
+    </div>
 
     <div class="divider"></div>
 
