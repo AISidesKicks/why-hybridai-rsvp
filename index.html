@@ -475,6 +475,39 @@
 
     <div class="divider"></div>
 
+    <!-- trending section: loop transformers -->
+
+    <h2>Trending: why do loop transformers "eat" GPU power?</h2>
+
+    <p>Based on current discussions in AI architecture (often referred to as Recurrent Depth or Looped Transformers):</p>
+
+    <ul>
+        <li><strong>The Diet of Loops:</strong> Standard transformers pass data through a series of unique layers once. A Loop Transformer, on the other hand, bolts a core block of layers into a ring. It passes the data through the same weights over and over again (doing multiple "laps").</li>
+        <li><strong>The GPU Snack:</strong> While this saves massive amounts of memory (since you aren't storing unique weights for every layer), it doesn't save compute. It can actually eat more raw GPU compute cycles because it repeatedly grinds through those iterations to "think longer." The more laps it runs to refine its hidden state, the more cycles it devours in the datacenter!</li>
+        <li><strong>Latent Reasoning:</strong> Unlike "Chain-of-Thought" where you can read what the AI is thinking on paper, Loop Transformers do all their deep thinking in latent space - silently chewing on math and numbers inside the loop until they spit out the final answer.</li>
+    </ul>
+
+    <div style="margin: 2rem 0; text-align: center;">
+        <img
+            src="assets/images/looptransformermonster.jpeg"
+            alt="Loop transformer monster eating GPU compute cycles"
+            style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
+            loading="lazy"
+        >
+    </div>
+
+    <p><strong>OpenAI Astra and Recurrent Depth / Looped Transformers</strong> (Sebastian Raschka):</p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/KT4n-z_4QJU" title="OpenAI Astra and Recurrent Depth / Looped Transformers" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <p><strong>GPT 6 Astra: The End of Chain-of-Thought?</strong> (Cloud Codes):</p>
+    <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/HS0x-KJEXlg" title="GPT 6 Astra: The End of Chain-of-Thought?" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <div class="divider"></div>
+
     <p class="footer-powered"><strong>Why Hybrid AI rsvp</strong> is part of the <strong>Local AI is not CHEAP</strong> project. Related projects:</p>
     <ul class="footer-projects">
         <li><a href="https://localai.isnot.cheap/" target="_blank">Local AI is not CHEAP</a> - EDU AI LAB for tokenomics</li>
