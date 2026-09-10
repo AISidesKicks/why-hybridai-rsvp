@@ -557,7 +557,7 @@
 
     <div class="divider"></div>
 
-    <h2 id="agentX">AgentX is replaying real workloads</h2>
+    <h2 id="agentX">AgentX 1.0 is replaying real CLAUDE workloads</h2>
 
     <p><a href="https://locsic.com/thinking/agentx-1-cuda-moat/" target="_blank">Dissecting SemiAnalysis AgentX: The First Big Exam for Agentic-Era Inference</a></p>
 
@@ -572,6 +572,18 @@
         <li><a href="https://inferencex.semianalysis.com/agentx/optimizations/dynamo" target="_blank">Router and orchestration (NVIDIA Dynamo)</a></li>
         <li><a href="https://inferencex.semianalysis.com/agentx/optimizations/lmcache" target="_blank">KV-cache layer (LMCache)</a></li>
     </ul>
+
+    <h3>Five lessons in KV-lifecycle engineering</h3>
+
+    <ul>
+        <li><strong>Cache hit rate is the first-order productive force:</strong> same load, same engine, same decode path - B300 hits cache 91% of the time, B200 only 73%. The KV working set either fits in HBM or the latency curve deforms through DRAM offload. "How much memory to buy" is now a cache-economics problem.</li>
+        <li><strong>Routing must know where state lives:</strong> measured DP-attention cache hit was 28.8% against a 96% theoretical - the gap is the routing tax. Cache-aware routing (session stickiness, consistent hashing) graduated from optional to mandatory, with patches landing across vLLM router, llm-d, SGLang model gateway and ATOMesh.</li>
+        <li><strong>Hybrid architectures bring unreconstructable state:</strong> GDN, sparse attention and conv+SSM layers carry recurrent state beyond the KV cache. A lost sliding-window tail can be recomputed from neighboring tokens; lost recurrent state can only be recovered by replaying the entire sequence.</li>
+        <li><strong>Multi-turn loads carry taxes single-shot loads never see:</strong> every turn re-sends the full history - naive re-tokenization of the same ~100K tokens dropped from 185.1ms to 11.3ms with boundary-aware tokenization, payload re-serialization cost 8.1% throughput (fixed by MessagePack), and a per-step device-to-host sync hid a decode bubble.</li>
+        <li><strong>Scheduling stopped serving free lunches:</strong> SGLang's forced decode interval raised DeepSeek V4 Pro output throughput 141% with p99 inter-token latency down 97.3% - at the cost of median TTFT rising from 36.5 to 59 seconds. Explicit trade-offs, no defaults.</li>
+    </ul>
+
+    <p>Chain the five end to end and one judgment falls out: the agentic inference bottleneck has moved from the kernel layer up to <strong>state management</strong> - the largest batch of the 70+ upstream PRs touches exactly this: cache survival, transfer granularity, routing ownership.</p>
 
     <div class="divider"></div>
 
